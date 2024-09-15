@@ -87,7 +87,7 @@ import {
   objectTypeFromZodObject,
   inputObjectFromZodObject,
   validateArg,
-} from '../../src'
+} from 'gqtx-zod'
 
 import {
   User,
@@ -208,3 +208,9 @@ server.listen(4000, () => {
   console.info('Server is running on http://localhost:4000/graphql')
 })
 ```
+
+# License
+
+Copyright © 2024 [Kay Gosho](https://github.com/acro5piano) (@acro5piano).
+
+This project is licensed under the MIT License - see the LICENSE file for details.
