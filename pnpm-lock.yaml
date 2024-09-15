@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      zod-validation-error:
+        specifier: ^3.3.1
+        version: 3.3.1(zod@3.23.8)
     devDependencies:
       '@types/node':
         specifier: ^22.5.5
@@ -20,6 +24,9 @@ importers:
       gqtx:
         specifier: ^0.9.3
         version: 0.9.3(graphql@16.9.0)
+      graphql:
+        specifier: ^16.9.0
+        version: 16.9.0
       graphql-scalars:
         specifier: ^1.23.0
         version: 1.23.0(graphql@16.9.0)
@@ -339,6 +346,12 @@ packages:
     resolution: {integrity: sha512-Z6Uz+TYwEqE7ZN50gwn+1LCVo9ZVrpxRPOhOLnncYkY1ZzOYtrX8Fwf/rFktZ8R5mJms6EZf5TqNOMeZmnPq9Q==}
     engines: {node: '>=12'}
 
+  zod-validation-error@3.3.1:
+    resolution: {integrity: sha512-uFzCZz7FQis256dqw4AhPQgD6f3pzNca/Zh62RNELavlumQB3nDIUFbF5JQfFLcMbO1s02Q7Xg/gpcOBlEnYZA==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      zod: ^3.18.0
+
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
@@ -600,5 +613,9 @@ snapshots:
   urlpattern-polyfill@10.0.0: {}
 
   value-or-promise@1.0.12: {}
+
+  zod-validation-error@3.3.1(zod@3.23.8):
+    dependencies:
+      zod: 3.23.8
 
   zod@3.23.8: {}
