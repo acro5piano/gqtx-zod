@@ -87,7 +87,7 @@ import {
   objectTypeFromZodObject,
   inputObjectFromZodObject,
   validateArg,
-} from '../../src'
+} from 'gqtx-zod'
 
 import {
   User,

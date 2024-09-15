@@ -89,8 +89,8 @@ const Mutation = Gql.Mutation({
         input: Gql.Arg({ type: Gql.NonNullInput(UserInput) }),
       },
       resolve(_, args) {
-        // Helper function to validate args input with Zod
-        // If input has wrong value, it raises an human-readable error
+        // `validateArg` is a Helper function to validate any input with Zod.
+        // If input has a wrong value, it raises an human-readable error.
         validateArg(args.input, ZodUserInputSchema)
         // `args.input` is automatically inferred as `z.infer<typeof ZodUserInputSchema>`
         // with the power of gqtx and a type magic.
