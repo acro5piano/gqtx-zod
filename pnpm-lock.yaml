@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      graphql-scalars:
+        specifier: ^1.23.0
+        version: 1.23.0(graphql@16.9.0)
       zod-validation-error:
         specifier: ^3.3.1
         version: 3.3.1(zod@3.23.8)
@@ -27,9 +30,6 @@ importers:
       graphql:
         specifier: ^16.9.0
         version: 16.9.0
-      graphql-scalars:
-        specifier: ^1.23.0
-        version: 1.23.0(graphql@16.9.0)
       graphql-yoga:
         specifier: ^5.7.0
         version: 5.7.0(graphql@16.9.0)
