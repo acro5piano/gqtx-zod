@@ -1,6 +1,6 @@
 {
   "name": "gqtx-zod",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Seamlessly Integrate Zod and gqtx for easy Type-Safe GraphQL APIs",
   "main": "dist/index.js",
   "keywords": [],
