@@ -45,20 +45,19 @@ export function objectTypeFromZodObject<T extends z.ZodRawShape>(
   for (const key of keys(zodObj.shape)) {
     const value = zodObj.shape[key]
     const gqlType = zodScalarToGqlScalar(value)
+    const name = key as string
     if (gqlType) {
       if (value instanceof z.ZodArray) {
         fields.push(
           Gql.Field({
-            name: key as string,
+            name,
             type: Gql.NonNull(Gql.List(Gql.NonNull(gqlType))),
           }),
         )
       } else if (value.isNullable() || value.isOptional()) {
-        fields.push(Gql.Field({ name: key as string, type: gqlType }))
+        fields.push(Gql.Field({ name, type: gqlType }))
       } else {
-        fields.push(
-          Gql.Field({ name: key as string, type: Gql.NonNull(gqlType) }),
-        )
+        fields.push(Gql.Field({ name, type: Gql.NonNull(gqlType) }))
       }
     }
   }
@@ -78,7 +77,9 @@ export function objectTypeFromZodObject<T extends z.ZodRawShape>(
 
 // inputObjectFromZodObject,
 
-function zodScalarToGqlScalar(zodType: z.ZodType): null | ScalarType<any> {
+function zodScalarToGqlScalar(
+  zodType: z.ZodType,
+): null | ScalarType<any> | EnumType<any> {
   if (zodType instanceof z.ZodUnion) {
     // Since GraphQL doesn't allow union scalar, getting [0] is enough.
     // https://stackoverflow.com/questions/49897319/graphql-union-scalar-type
@@ -113,7 +114,6 @@ function zodScalarToGqlScalar(zodType: z.ZodType): null | ScalarType<any> {
     if (!e) {
       throw new Error('Enum is not registered')
     }
-    // @ts-ignore: why???
     return e
   }
   if (zodType instanceof z.ZodNumber) {
