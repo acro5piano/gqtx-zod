@@ -1,55 +1,3 @@
-# gqtx-zod
-
-gqtx-zod: Seamlessly Integrate Zod and gqtx for easy Type-Safe GraphQL APIs.
-
-# Installation
-
-Install using the dependency manager of your choice.
-
-```bash
-# npm
-npm install --save gqtx-zod
-
-# pnpm
-pnpm add gqtx-zod
-
-# Yarn
-yarn add gqtx-zod
-
-# Bun
-bun add gqtx-zod
-```
-
-# Usage
-
-First, create your Zod types:
-
-```typescript
-// zod-types.ts
-
-import { z } from 'zod'
-
-export const ZodRoleEnum = z.enum(['ADMIN', 'USER'])
-
-export const ZodUserSchema = z.object({
-  id: z.string().uuid(),
-  role: ZodRoleEnum,
-  firstName: z.string().min(3),
-  lastName: z.string().min(3),
-})
-export type User = z.infer<typeof ZodUserSchema>
-
-export const ZodUserInputSchema = ZodUserSchema.omit({
-  // id is auto-generated, so the client can't specify it
-  id: true,
-})
-```
-
-Then, create your schema using gqtx and gqtx-zod:
-
-```typescript
-// schema.ts
-
 import { Gql, buildGraphQLSchema } from 'gqtx'
 import { randomUUID } from 'crypto'
 import {
@@ -158,23 +106,3 @@ export const schema = buildGraphQLSchema({
   query: Query,
   mutation: Mutation,
 })
-```
-
-Finally, use your favorite server option to serve the schema!
-
-```typescript
-// serve.ts
-
-import { createServer } from 'node:http'
-import { createYoga } from 'graphql-yoga'
-import { schema } from './schema'
-
-const yoga = createYoga({ schema })
-
-const server = createServer(yoga)
-
-// Start the server and you're done!
-server.listen(4000, () => {
-  console.info('Server is running on http://localhost:4000/graphql')
-})
-```
