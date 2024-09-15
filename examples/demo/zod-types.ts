@@ -9,3 +9,7 @@ export const ZodUserSchema = z.object({
   lastName: z.string().min(3),
 })
 export type User = z.infer<typeof ZodUserSchema>
+
+export const ZodUserInputSchema = ZodUserSchema.omit({
+  id: true,
+})

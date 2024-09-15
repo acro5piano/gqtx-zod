@@ -2,6 +2,7 @@ import { z } from 'zod'
 import {
   EnumType,
   Gql,
+  InputObjectType,
   type Field,
   type InputFieldMap,
   type ScalarType,
@@ -75,9 +76,51 @@ export function objectTypeFromZodObject<T extends z.ZodRawShape>(
   return gqlType
 }
 
-// inputObjectFromZodObject,
+export function inputObjectFromZodObject<T extends z.ZodRawShape>(
+  name: string,
+  inputFields: z.ZodObject<T>,
+  options: { description?: string; additionalFields?: InputFieldMap<any> } = {},
+): InputObjectType<z.infer<z.ZodObject<T>>> {
+  const fields: InputFieldMap<any> = {}
+  for (const key of keys(inputFields.shape)) {
+    const value = inputFields.shape[key]
+    const gqlType = zodScalarToGqlScalar(value)
+    if (gqlType) {
+      if (
+        // HACK: zod does not provide type guard here
+        (value.isNullable() && value instanceof z.ZodNullable) ||
+        (value.isOptional() && value instanceof z.ZodOptional)
+      ) {
+        const inner = value.unwrap()
+        if (inner instanceof z.ZodArray) {
+          fields[key] = {
+            type: Gql.ListInput(Gql.NonNullInput(gqlType)),
+          }
+        } else {
+          fields[key] = { type: gqlType }
+        }
+      } else {
+        if (value instanceof z.ZodArray) {
+          fields[key] = {
+            type: Gql.NonNullInput(Gql.ListInput(Gql.NonNullInput(gqlType))),
+          }
+        } else {
+          fields[key] = { type: Gql.NonNullInput(gqlType) }
+        }
+      }
+    }
+  }
+  const { description = name, additionalFields = {} } = options
+  Object.assign(fields, additionalFields)
+  const gqlInput = Gql.InputObject({
+    name,
+    description,
+    fields: () => fields,
+  })
+  return gqlInput
+}
 
-function zodScalarToGqlScalar(
+export function zodScalarToGqlScalar(
   zodType: z.ZodType,
 ): null | ScalarType<any> | EnumType<any> {
   if (zodType instanceof z.ZodUnion) {

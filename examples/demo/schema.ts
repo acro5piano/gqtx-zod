@@ -2,9 +2,15 @@ import { Gql, buildGraphQLSchema } from 'gqtx'
 import {
   registerEnum,
   objectTypeFromZodObject,
-  // inputObjectFromZodObject,
+  inputObjectFromZodObject,
 } from '../../src'
-import { User, ZodRoleEnum, ZodUserSchema } from './zod-types'
+import {
+  User,
+  ZodRoleEnum,
+  ZodUserSchema,
+  ZodUserInputSchema,
+} from './zod-types'
+import { randomUUID } from 'crypto'
 
 const users: User[] = [
   { id: '1', role: 'ADMIN', firstName: 'Sikan', lastName: 'Smith' },
@@ -28,6 +34,10 @@ const UserType = objectTypeFromZodObject('User', ZodUserSchema, {
   ],
 })
 
+const UserInput = inputObjectFromZodObject('UserInput', ZodUserInputSchema, {
+  description: 'A User input',
+})
+
 const Query = Gql.Query({
   fields: () => [
     Gql.Field({
@@ -46,6 +56,27 @@ const Query = Gql.Query({
   ],
 })
 
+const Mutation = Gql.Mutation({
+  fields: () => [
+    Gql.Field({
+      name: 'createUser',
+      type: UserType,
+      args: {
+        input: Gql.Arg({ type: Gql.NonNullInput(UserInput) }),
+      },
+      resolve(_, args) {
+        ZodUserInputSchema.parse(args.input)
+        const id = randomUUID()
+        const newUser: User = { id, ...args.input }
+        // `args` is automatically inferred as { input: z.infer<typeof ZodUserInputSchema> }
+        users.push(newUser)
+        return newUser
+      },
+    }),
+  ],
+})
+
 export const schema = buildGraphQLSchema({
   query: Query,
+  mutation: Mutation,
 })
