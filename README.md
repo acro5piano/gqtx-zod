@@ -101,7 +101,7 @@ const UserType = objectTypeFromZodObject('User', ZodUserSchema, {
   ],
 })
 
-// You can create GraphQL Input from Zod type
+// You can create a GraphQL Input from a Zod object
 const UserInput = inputObjectFromZodObject('UserInput', ZodUserInputSchema, {
   description: 'A User input',
 })
