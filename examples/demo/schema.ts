@@ -33,23 +33,28 @@ registerEnum('Role', ZodRoleEnum, {
   description: 'A user role',
 })
 
+// By specifying ZodUserSchema, all fields of ZodUserSchema will be implemented in `UserType`
 const UserType = objectTypeFromZodObject('User', ZodUserSchema, {
   description: 'A User',
+  // You can still implement fields not specified in the zod type
   fieldResolvers: () => [
     Gql.Field({
       name: 'fullName',
       type: Gql.NonNull(Gql.String),
       resolve(user) {
+        // `user` is infered as `z.infer<typeof ZodUserSchema>`
         return `${user.firstName} ${user.lastName}`
       },
     }),
   ],
 })
 
+// You can create GraphQL Input from Zod type
 const UserInput = inputObjectFromZodObject('UserInput', ZodUserInputSchema, {
   description: 'A User input',
 })
 
+// Nothing special here. gqtx magic works as expected.
 const Query = Gql.Query({
   fields: () => [
     Gql.Field({
