@@ -11,6 +11,8 @@ import { DateTimeScalar } from './DateTimeScalar'
 
 const enumMap: Record<string, EnumType<any>> = {}
 
+const ZodEnumIdentifierKey = '__gqlName'
+
 export function registerEnum<T extends [string, ...string[]]>(
   name: string,
   zodEnum: z.ZodEnum<T>,
@@ -23,7 +25,7 @@ export function registerEnum<T extends [string, ...string[]]>(
     description,
   })
   enumMap[name] = enu
-  Object.assign(zodEnum, { __gqlName: name })
+  Object.assign(zodEnum, { [ZodEnumIdentifierKey]: name })
   return enu
 }
 
@@ -106,7 +108,8 @@ function zodScalarToGqlScalar(zodType: z.ZodType): null | ScalarType<any> {
     return DateTimeScalar
   }
   if (zodType instanceof z.ZodEnum) {
-    const e = enumMap[zodType.__gqlName]
+    const e =
+      enumMap[zodType[ZodEnumIdentifierKey as any as keyof typeof zodType]] // HACK for enum
     if (!e) {
       throw new Error('Enum is not registered')
     }
