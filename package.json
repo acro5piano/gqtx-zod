@@ -2,14 +2,22 @@
   "name": "gqtx-zod",
   "version": "0.0.1",
   "description": "Seamlessly Integrate Zod and gqtx for easy Type-Safe GraphQL APIs",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "keywords": [],
+  "author": "acro5piano <ketsume0211@gmail.com>",
+  "license": "MIT",
+  "files": [
+    "dist/*.js",
+    "dist/*.map",
+    "dist/*.ts",
+    "package.json",
+    "LICENSE",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc",
     "run-demo": "node -r esbuild-register ./examples/demo/serve.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
   "devDependencies": {
     "@types/node": "^22.5.5",
     "esbuild": "^0.23.1",
