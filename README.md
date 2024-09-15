@@ -37,21 +37,26 @@ export const ZodUserSchema = z.object({
   firstName: z.string().min(3),
   lastName: z.string().min(3),
 })
-export type User = z.infer<typeof UserSchema>
+export type User = z.infer<typeof ZodUserSchema>
 ```
 
 Then, create your schema using gqtx and gqtx-zod:
 
 ```typescript
+// schema.ts
+
 import { Gql, buildGraphQLSchema } from 'gqtx'
-import { registerEnum, objectTypeFromZodObject, inputObjectFromZodObject } from 'gqtx-zod'
+import {
+  registerEnum,
+  objectTypeFromZodObject,
+  inputObjectFromZodObject,
+} from 'gqtx-zod'
 import { ZodRoleEnum, ZodUserSchema } from './zod-types'
 
 const users: User[] = [
-  { id: '1', role: Role.Admin, firstName: 'Sikan', lastName: 'Smith', },
-  { id: '2', role: Role.User, firstName: 'Nicole', lastName: 'Doe', },
+  { id: '1', role: Role.Admin, firstName: 'Sikan', lastName: 'Smith' },
+  { id: '2', role: Role.User, firstName: 'Nicole', lastName: 'Doe' },
 ]
-
 
 registerEnum('Role', ZodRoleEnum, {
   description: 'A user role',
@@ -74,9 +79,11 @@ const Query = Gql.Query({
     Gql.Field({
       name: 'userById',
       type: UserType,
-      args: inputObjectFromZodObject(z.object({
-        id: z.string().uuid(),
-      }),
+      args: inputObjectFromZodObject(
+        z.object({
+          id: z.string().uuid(),
+        }),
+      ),
       resolve: (_, args, ctx) => {
         // `args` is automatically inferred as { id: string }
         const user = users.find((u) => u.id === args.id)
@@ -89,5 +96,24 @@ const Query = Gql.Query({
 
 const schema = buildGraphQLSchema({
   query: Query,
+})
+```
+
+Finally, use your favorite server option to serve the schema!
+
+```typescript
+// serve.ts
+
+import { createServer } from 'node:http'
+import { createYoga } from 'graphql-yoga'
+import { schema } from './schema'
+
+const yoga = createYoga({ schema })
+
+const server = createServer(yoga)
+
+// Start the server and you're done!
+server.listen(4000, () => {
+  console.info('Server is running on http://localhost:4000/graphql')
 })
 ```
