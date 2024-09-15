@@ -1,6 +1,36 @@
 # gqtx-zod
 
-gqtx-zod: Seamlessly Integrate Zod and gqtx for easy Type-Safe GraphQL APIs.
+Easily integrate Zod with gqtx to create type-safe GraphQL APIs. Share Zod object types directly with GraphQL types for a seamless experience!
+
+# tl;dr
+
+Before:
+
+```typescript
+const UserSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(3),
+})
+const UserType = Gql.Object<User>({
+  name: 'User',
+  fields: () => [
+    Gql.Field({ name: 'id', type: Gql.NonNull(Gql.ID) }),
+    Gql.Field({ name: 'name', type: Gql.NonNull(Gql.String) }),
+  ],
+})
+```
+
+After:
+
+```typescript
+const UserSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(3),
+})
+const UserType = objectTypeFromZodObject('User', UserSchema)
+```
+
+You've saved 6 lines of code, as well as your mental overhead.
 
 # Installation
 

@@ -155,7 +155,9 @@ export function zodScalarToGqlScalar(
     const e =
       enumMap[zodType[ZodEnumIdentifierKey as any as keyof typeof zodType]] // HACK for enum
     if (!e) {
-      throw new Error('Enum is not registered')
+      throw new Error(
+        'Enum is not registered. Please make sure you call `registerEnum` before using the enum in a GraphQL type.',
+      )
     }
     return e
   }
