@@ -16,6 +16,10 @@ const UserType = Gql.Object<User>({
   fields: () => [
     Gql.Field({ name: 'id', type: Gql.NonNull(Gql.ID) }),
     Gql.Field({ name: 'name', type: Gql.NonNull(Gql.String) }),
+    Gql.Field({ name: 'and', type: Gql.NonNull(Gql.Int) }),
+    Gql.Field({ name: 'lots', type: Gql.NonNull(Gql.Float) }),
+    Gql.Field({ name: 'of', type: Gql.NonNull(GqlUserKindEnum) }),
+    Gql.Field({ name: 'fields', type: Gql.NonNull(Gql.Date) }),
   ],
 })
 ```
