@@ -34,7 +34,7 @@ const UserSchema = z.object({
 const UserType = objectTypeFromZodObject('User', UserSchema)
 ```
 
-You've saved 6 lines of code, as well as your mental overhead.
+You've saved 10 lines of code, as well as your mental overhead.
 
 # Installation
 
@@ -73,6 +73,7 @@ export const ZodUserSchema = z.object({
 })
 export type User = z.infer<typeof ZodUserSchema>
 
+// Create User input schema by reusing `ZodUserSchema`
 export const ZodUserInputSchema = ZodUserSchema.omit({
   // id is auto-generated, so the client can't specify it
   id: true,
