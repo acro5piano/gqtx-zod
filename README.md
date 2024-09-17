@@ -10,6 +10,10 @@ Before:
 const UserSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(3),
+  and: z.number().int(),
+  lots: z.number(),
+  of: z.boolean(),
+  fields: z.string(),
 })
 const UserType = Gql.Object<User>({
   name: 'User',
@@ -18,8 +22,8 @@ const UserType = Gql.Object<User>({
     Gql.Field({ name: 'name', type: Gql.NonNull(Gql.String) }),
     Gql.Field({ name: 'and', type: Gql.NonNull(Gql.Int) }),
     Gql.Field({ name: 'lots', type: Gql.NonNull(Gql.Float) }),
-    Gql.Field({ name: 'of', type: Gql.NonNull(GqlUserKindEnum) }),
-    Gql.Field({ name: 'fields', type: Gql.NonNull(Gql.Date) }),
+    Gql.Field({ name: 'of', type: Gql.NonNull(Gql.Bool) }),
+    Gql.Field({ name: 'fields', type: Gql.NonNull(Gql.DateTimeScalar) }),
   ],
 })
 ```
@@ -30,6 +34,10 @@ After:
 const UserSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(3),
+  and: z.number().int(),
+  lots: z.number(),
+  of: z.boolean(),
+  fields: z.string(),
 })
 const UserType = objectTypeFromZodObject('User', UserSchema)
 ```
